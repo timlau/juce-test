@@ -21,6 +21,8 @@ endif ()
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
 # included JUCE directly in your source tree (perhaps as a submodule), you'll need to tell CMake to
 # include that subdirectory as part of the build.
+include(GNUInstallDirs)
+set(JUCE_ENABLE_MODULE_SOURCE_GROUPS ON)
 
 find_package(JUCE 8.0.0 CONFIG REQUIRED)        # If you've installed JUCE to your system
 add_subdirectory(libs/clap-juce-extensions EXCLUDE_FROM_ALL) 
@@ -36,6 +38,7 @@ juce_add_plugin(
     FORMATS ${JUCE_FORMATS}                  
     PRODUCT_NAME ${PLUGIN_NAME}
     LV2URI https://github.com/timlau
+    COPY_PLUGIN_AFTER_BUILD ON
 )        
 
 juce_generate_juce_header(${PLUGIN_NAME})
@@ -44,7 +47,7 @@ clap_juce_extensions_plugin(TARGET ${PLUGIN_NAME}
 CLAP_ID "dk.rasmil.TestPlugin"
 CLAP_FEATURES utility "Test Plugin" This is a test plugin)
 
-target_sources(TimAudioPlugin
+target_sources(${PLUGIN_NAME}
     PRIVATE
         src/PluginEditor.cpp
         src/PluginProcessor.cpp
@@ -89,3 +92,8 @@ target_link_libraries(
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
 )
+
+
+install(TARGETS ${PLUGIN_NAME}_VST3 
+      LIBRARY
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/vst3 )
