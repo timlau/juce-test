@@ -23,6 +23,7 @@ endif ()
 # include that subdirectory as part of the build.
 
 find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
+add_subdirectory(libs/clap-juce-extensions EXCLUDE_FROM_ALL) 
 # or
 #add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
 
@@ -39,6 +40,9 @@ juce_add_plugin(
 
 juce_generate_juce_header(${PLUGIN_NAME})
 
+clap_juce_extensions_plugin(TARGET ${PLUGIN_NAME}
+CLAP_ID "dk.rasmil.TestPlugin"
+CLAP_FEATURES utility "Test Plugin" This is a test plugin)
 
 target_sources(TimAudioPlugin
     PRIVATE
