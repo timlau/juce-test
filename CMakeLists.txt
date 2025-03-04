@@ -22,7 +22,7 @@ endif ()
 # included JUCE directly in your source tree (perhaps as a submodule), you'll need to tell CMake to
 # include that subdirectory as part of the build.
 
-find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
+find_package(JUCE 8.0.0 CONFIG REQUIRED)        # If you've installed JUCE to your system
 add_subdirectory(libs/clap-juce-extensions EXCLUDE_FROM_ALL) 
 # or
 #add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
