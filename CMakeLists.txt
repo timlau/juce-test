@@ -21,7 +21,6 @@ endif ()
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
 # included JUCE directly in your source tree (perhaps as a submodule), you'll need to tell CMake to
 # include that subdirectory as part of the build.
-include(GNUInstallDirs)
 set(JUCE_ENABLE_MODULE_SOURCE_GROUPS ON)
 
 find_package(JUCE 8.0.0 CONFIG REQUIRED)        # If you've installed JUCE to your system
@@ -38,7 +37,6 @@ juce_add_plugin(
     FORMATS ${JUCE_FORMATS}                  
     PRODUCT_NAME ${PLUGIN_NAME}
     LV2URI https://github.com/timlau
-    COPY_PLUGIN_AFTER_BUILD ON
 )        
 
 juce_generate_juce_header(${PLUGIN_NAME})
@@ -94,6 +92,19 @@ target_link_libraries(
 )
 
 
-install(TARGETS ${PLUGIN_NAME}_VST3 
-      LIBRARY
-      DESTINATION ${CMAKE_INSTALL_LIBDIR}/vst3 )
+# Linux Installation 
+if (UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+    set(ARTEFACTS_DIR ${PLUGIN_NAME}_artefacts)
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/${ARTEFACTS_DIR}/${CMAKE_BUILD_TYPE}/LV2/${PLUGIN_NAME}.lv2
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/lv2  )
+
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/${ARTEFACTS_DIR}/${CMAKE_BUILD_TYPE}/VST3/${PLUGIN_NAME}.vst3
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/vst3  )
+
+    install(TARGETS ${PLUGIN_NAME}_Standalone
+            DESTINATION ${CMAKE_INSTALL_BINDIR}  )
+
+    install(TARGETS ${PLUGIN_NAME}_CLAP
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/clap )
+endif ()        
