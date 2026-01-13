@@ -3,6 +3,9 @@
 cmake_minimum_required(VERSION 3.22)
 project(TimAudioPlugin VERSION 0.0.1)
 
+# include CPM
+include(cmake/CPM.cmake)
+
 # Variables.
 set(PLUGIN_NAME "TimAudioPlugin" CACHE INTERNAL "")
 set(MANUFACTURER_NAME "NerdyTimCorp" CACHE INTERNAL "")
@@ -23,10 +26,9 @@ endif ()
 # include that subdirectory as part of the build.
 set(JUCE_ENABLE_MODULE_SOURCE_GROUPS ON)
 
-find_package(JUCE 8.0.0 CONFIG REQUIRED)        # If you've installed JUCE to your system
-add_subdirectory(libs/clap-juce-extensions EXCLUDE_FROM_ALL) 
-# or
-#add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+
+CPMAddPackage("gh:/juce-framework/JUCE#8.0.11")
+CPMAddPackage("gh:/free-audio/clap-juce-extensions#main")
 
 juce_add_plugin(
     ${PLUGIN_NAME}
@@ -34,10 +36,10 @@ juce_add_plugin(
     COMPANY_NAME ${MANUFACTURER_NAME}                          # Specify the name of the plugin's author
     PLUGIN_MANUFACTURER_CODE Ntim               # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE Tap1                            # A unique four-character plugin id with exactly one upper-case character
-    FORMATS ${JUCE_FORMATS}                  
+    FORMATS ${JUCE_FORMATS}
     PRODUCT_NAME ${PLUGIN_NAME}
     LV2URI https://github.com/timlau
-)        
+)
 
 juce_generate_juce_header(${PLUGIN_NAME})
 
@@ -92,7 +94,7 @@ target_link_libraries(
 )
 
 
-# Linux Installation 
+# Linux Installation
 if (UNIX AND NOT APPLE)
     include(GNUInstallDirs)
     set(ARTEFACTS_DIR ${PLUGIN_NAME}_artefacts)
@@ -107,4 +109,4 @@ if (UNIX AND NOT APPLE)
 
     install(TARGETS ${PLUGIN_NAME}_CLAP
             DESTINATION ${CMAKE_INSTALL_LIBDIR}/clap )
-endif ()        
+endif ()
