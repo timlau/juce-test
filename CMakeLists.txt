@@ -5,6 +5,9 @@ project(TimAudioPlugin VERSION 0.0.1)
 
 # include CPM
 include(cmake/CPM.cmake)
+# Dependencies
+CPMAddPackage("gh:/juce-framework/JUCE#8.0.11")
+CPMAddPackage("gh:/free-audio/clap-juce-extensions#main")
 
 # Variables.
 set(PLUGIN_NAME "TimAudioPlugin" CACHE INTERNAL "")
@@ -27,8 +30,6 @@ endif ()
 set(JUCE_ENABLE_MODULE_SOURCE_GROUPS ON)
 
 
-CPMAddPackage("gh:/juce-framework/JUCE#8.0.11")
-CPMAddPackage("gh:/free-audio/clap-juce-extensions#main")
 
 juce_add_plugin(
     ${PLUGIN_NAME}
